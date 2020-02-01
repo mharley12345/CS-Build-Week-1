@@ -5,6 +5,7 @@ from django.http import JsonResponse
 from decouple import config
 from django.contrib.auth.models import User
 from .models import *
+from rest_framework import serializers,viewsets
 from rest_framework.decorators import api_view
 import json
 
@@ -65,3 +66,30 @@ def move(request):
 def say(request):
     # IMPLEMENT
     return JsonResponse({'error':"Not yet implemented"}, safe=True, status=500)
+
+
+class RoomSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Room
+        fields = ('title','description')
+    def create(self,validate_data):
+        user = self.context['request'].user
+        rooms = Room.objects.create(**validate_data)
+        return rooms
+
+
+class RoomViewSet(viewsets.ModelViewSet):
+
+    serializer_class = RoomSerializer
+    queryset= Room.objects.none()
+
+    def get_queryset(self):
+        logged_in_user = self.request.user
+
+        if logged_in_user.is_anonymous:
+            return Room.objects.none()
+        else:
+            return Room.objects.all()
+        return get_queryset()
+
+
