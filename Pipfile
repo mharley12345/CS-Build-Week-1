@@ -17,6 +17,11 @@ django-rest-api = "*"
 psycopg2-binary = "*"
 dj-database-url = "*"
 whitenoise = "*"
+graphene-django = "*"
+graphene = "*"
+pyton-dotenv = "*"
+python-dotenv = "*"
+dotenv = "*"
 
 [dev-packages]
 
